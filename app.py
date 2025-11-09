@@ -206,8 +206,7 @@ def set_slide_background(slide, image_url: str | None) -> float:
     stream = BytesIO()
     img.save(stream, format="JPEG")
     stream.seek(0)
-    put_image(stream)
-    dark_overlay()                      # always a dark overlay for readability
+    put_image(stream)                      # always a dark overlay for readability
     return bright
 # ------------------------------------------------------------------
 # 5. Generate Gemini content
