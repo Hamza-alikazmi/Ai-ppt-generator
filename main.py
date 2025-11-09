@@ -129,24 +129,14 @@ def set_slide_background(slide, image_url: str | None) -> float:
         slide.shapes._spTree.remove(pic._element)
         slide.shapes._spTree.insert(2, pic._element)   # behind everything
 
-    def smart_overlay(brightness: float):
+    def dark_overlay():
         w, h = slide_dims()
-        overlay = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, w, h)
-        fill = overlay.fill
-        fill.solid()
-
-        if brightness > 160:  # very light image
-            fill.fore_color.rgb = RGBColor(0, 0, 0)
-            fill.transparency = 0.35
-        elif brightness > 100:  # medium
-            fill.fore_color.rgb = RGBColor(0, 0, 0)
-            fill.transparency = 0.25
-        else:  # dark image
-            fill.fore_color.rgb = RGBColor(255, 255, 255)
-            fill.transparency = 0.15
-
-        slide.shapes._spTree.remove(overlay._element)
-        slide.shapes._spTree.insert(3, overlay._element)
+        ov = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, w, h)
+        ov.fill.solid()
+        ov.fill.fore_color.rgb = RGBColor(0, 0, 0)
+        ov.fill.transparency   = 0.4
+        slide.shapes._spTree.remove(ov._element)
+        slide.shapes._spTree.insert(3, ov._element)
 
     # ---------- 1. make sure a local fallback exists ----------
     if not os.path.exists(FALLBACK_PATH):
@@ -209,7 +199,6 @@ def set_slide_background(slide, image_url: str | None) -> float:
         print("No image → solid dark background.")
         slide.background.fill.solid()
         slide.background.fill.fore_color.rgb = RGBColor(20, 20, 40)
-        dark_overlay()
         return 40.0                     # forces white text
 
     # ---------- 6. apply the chosen image ----------
@@ -218,7 +207,7 @@ def set_slide_background(slide, image_url: str | None) -> float:
     img.save(stream, format="JPEG")
     stream.seek(0)
     put_image(stream)
-                        # always a dark overlay for readability
+    dark_overlay()                      # always a dark overlay for readability
     return bright
 # ------------------------------------------------------------------
 # 5. Generate Gemini content
