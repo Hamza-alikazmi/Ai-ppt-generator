@@ -1,0 +1,8 @@
+flask
+gunicorn  # For production server on Koyeb
+google-generativeai  # Adjust to your version; for Gemini
+python-dotenv
+requests
+Pillow  # For PIL
+python-pptx
+numpy
